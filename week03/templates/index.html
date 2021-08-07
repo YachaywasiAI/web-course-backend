@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ORM--FLASK</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+</head>
+<body>
+  <div class="container">
+    <form action="/addAlbum" method="POST">
+      <div class="form-group">
+          <input type="text" name="artist" placeholder="Artist" class="form-control mt-1" id="text-artist">
+          <input type="text" name="title" placeholder="Title" class="form-control mt-1" id="text-title">
+          <input type="text" name="year" placeholder="Year" class="form-control mt-1" id="text-year">
+      </div>
+      <button type="submit" class="btn btn-primary mt-2">Add</button>
+    </form>
+    <div>
+      <ul class="list-group mt-2">
+          {% for album in albums %}
+          <li class="list-group-item">
+            <div>Artist: {{album.artist}} Album: {{album.artist}} Release Year: {{album.year}}</div>
+            <a onClick="deleteData(`/deleteAlbum/{{album.idAlbum}}`)" class="btn btn-danger"> Delete </a>
+            <a
+              onClick="updateData(`{{album.artist}}`, `{{album.title}}`, `{{album.year}}`, `{{album.idAlbum}}`)"
+              class="btn btn-success"
+              id="update-btn"> Update </a>
+          </li>
+          {% endfor %}
+      </ul>
+    </div>
+  </div>
+</body>
+<script>
+  function deleteData(url) {
+    return fetch(url, {
+      method: 'delete'
+    }).then(
+      response => response.json()
+    );
+  }
+
+  function updateData(artist, title, year, id) {
+    if (document.querySelector("#update-btn").innerHTML === "Save") {
+      const putMethod = {
+        method: 'PUT',
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        },
+        body: JSON.stringify({
+          'artist': document.querySelector("#text-artist").value,
+          'title': document.querySelector("#text-title").value,
+          'year': document.querySelector("#text-year").value,
+        })
+      }
+
+      fetch(`/updateAlbum/${id}`, putMethod)
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(err => console.log(err))
+    } else {
+      document.querySelector("#update-btn").innerHTML = "Save"
+      document.querySelector("#update-btn").className = "btn btn-warning"
+      document.querySelector("#text-artist").value = artist
+      document.querySelector("#text-title").value = title
+      document.querySelector("#text-year").value = year
+    }
+  }
+</script>
+</html>
