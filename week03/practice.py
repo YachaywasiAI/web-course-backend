@@ -55,22 +55,12 @@ class MetalStore(MethodView):
     def put(self, id):
         album_to_update = Album.query.filter_by(idAlbum=int(id)).first()
         if album_to_update:
-            print(album_to_update)
-            print(album_to_update.artist)
-
             album_to_update.artist = request.json['artist']
             album_to_update.title = request.json['title']
             album_to_update.year = int(request.json['year'])
             db.session.flush()
             db.session.commit()
             return redirect('/')
-
-
-
-    #def delete(self):
-
-# @app.route('/')
-# def root():
 
 
 if __name__ == '__main__':
