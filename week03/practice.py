@@ -10,11 +10,19 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///./MetalStore.db"
 db = SQLAlchemy(app)
 
+'''
+ORM Models
+'''
+
 class Album(db.Model):
     idAlbum = db.Column(db.Integer, primary_key=True)
     artist = db.Column(db.String(50))
     title = db.Column(db.String(50))
     year = db.Column(db.Integer)
+
+'''
+ORM Controllers 
+'''
 
 class RenderTemplateView(View):
     def __init__(self, template_name):
